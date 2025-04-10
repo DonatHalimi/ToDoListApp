@@ -1,4 +1,3 @@
-/* Global styles */
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 * {
@@ -6,6 +5,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
 
 ::selection {
@@ -13,7 +13,7 @@
   color: #fff;
 }
 
-/* Scrollbar styling */
+
 body {
   background: #3d3d73;
   display: flex;
@@ -21,25 +21,23 @@ body {
   align-items: center;
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 12px;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: #7070BB;
   border-radius: 10px;
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background-color: #3D3D73;
 }
 
-/* App container */
 .App {
   text-align: center;
 }
 
-/* Header styles */
 h1 {
   color: #fff;
   margin-bottom: 0.5rem;
@@ -48,29 +46,30 @@ h1 {
   left: 70px;
 }
 
-/* TodoWrapper container */
 .TodoWrapper {
   background: #202046;
   margin-top: 5rem;
-  padding: 2rem;
+  padding: 2rem 2rem 0 2rem;
   border-radius: 5px;
   margin-bottom: 10rem;
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* TodoForm styles */
 .TodoForm {
   width: 100%;
   margin-bottom: 1rem;
 }
 
-/* Input field styles */
 .todo-input {
   outline: none;
   background: none;
   border: 1px solid #3d3d73;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   width: 300px;
   color: #fff;
   cursor: text;
@@ -80,28 +79,27 @@ h1 {
   color: #ffffff4d;
 }
 
-/* Todo button styles */
 .todo-btn {
   background: #3d3d73;
   color: #fff;
   border: none;
   padding: 0.55rem;
   cursor: pointer;
+  border-radius: 2%;
 }
 
-/* Edit and delete buttons */
 .edit-button,
 .delete-button {
   cursor: pointer;
 }
 
-/* Todo styles */
 .Todo {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #3d3d73;
   color: #fff;
+  position: relative;
   padding: 0.75rem 1rem;
   border-radius: 5px;
   margin-bottom: 1rem;
@@ -112,7 +110,6 @@ h1 {
   margin-left: 0.75rem;
 }
 
-/* Incompleted and completed styles */
 .incompleted {
   color: #fff;
   cursor: pointer;
@@ -124,13 +121,11 @@ h1 {
   cursor: pointer;
 }
 
-/* Edit and delete icons */
 .edit-icon,
 .delete-icon {
   cursor: pointer;
 }
 
-/* ProgressBar styles */
 .progress-container {
   position: fixed;
   top: 0;
@@ -147,4 +142,173 @@ h1 {
   transition: width 0.7s ease-in-out;
   border-radius: 5px;
   position: relative;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+/* Confirm Delete Modal Styles */
+.confirm-delete {
+  position: absolute;
+  right: -160px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #202046;
+  color: #fff;
+  padding: 0.75rem;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 140px;
+  font-size: 0.8rem;
+}
+
+.confirm-delete-text {
+  margin-bottom: 0.5rem;
+}
+
+.confirm-delete-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  flex: 1;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+}
+
+.confirm-btn {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1040;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .modal-overlay.active {
+    display: block;
+  }
+
+  .confirm-delete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 16rem);
+    max-width: 400px;
+    z-index: 1050;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-overlay.active {
+    display: block;
+  }
+
+  .confirm-delete {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 280px;
+    right: auto;
+    z-index: 1050;
+  }
+
+  .confirm-delete-buttons {
+    gap: 1rem;
+  }
+
+  .cancel-btn,
+  .confirm-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    left: 0;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .TodoWrapper {
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .todo-input {
+    width: 100%;
+    margin: 0 auto 1rem auto;
+    display: block;
+  }
+
+  .TodoForm {
+    text-align: center;
+  }
+
+  .todo-btn {
+    width: 95%;
+    padding: 0.65rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .TodoWrapper {
+    padding: 1rem;
+    width: 140%;
+    max-width: 500px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .todo-input {
+    width: 100%;
+  }
+
+  .todo-btn {
+    width: 100%;
+  }
 }

@@ -1,24 +1,51 @@
-import React from 'react';
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-/* 
-   ToDo Component
-   
-   - Displays a task with options to toggle completion, edit, and delete.
-   - Task appearance changes based on completion status.
-   - Clicking on the task toggles its completion status.
-   - Provides edit and delete buttons for task actions.
-*/
+import { useState } from "react";
+import ConfirmDelete from "./ConfirmDelete";
 
 const ToDo = ({ task, toggleComplete, editTodo, deleteTodo }) => {
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handleClick = () => toggleComplete(task.id);
+    const handleEdit = (e) => {
+        e.stopPropagation();
+        editTodo(task.id);
+    };
+
+    const handleDelete = (e) => {
+        e.stopPropagation();
+        setShowPopup(true);
+    };
+
+    const confirmDelete = () => {
+        deleteTodo(task.id);
+        setShowPopup(false);
+    };
+
+    const cancelDelete = () => setShowPopup(false);
+
     return (
-        <div className='Todo'>
-            <p className={`${task.completed ? "completed" : ""}`} onClick={() => toggleComplete(task.id)}>{task.task}</p>
-            {/* Edit and delete buttons per task */}
-            <div>
-                <FontAwesomeIcon className='edit-button' icon={faPenToSquare} onClick={() => editTodo(task.id)} />
-                <FontAwesomeIcon className='delete-button' icon={faTrash} onClick={() => deleteTodo(task.id)} />
+        <div onClick={handleClick} className='Todo'>
+            <p className={`${task.completed ? "completed" : ""}`}>{task.task}</p>
+            <div className="icons">
+                <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    onClick={handleEdit}
+                    className='edit-button'
+                />
+                <div style={{ position: 'relative' }}>
+                    <FontAwesomeIcon
+                        icon={faTrash}
+                        onClick={handleDelete}
+                        className='delete-button'
+                    />
+                    {showPopup && (
+                        <ConfirmDelete
+                            onCancel={cancelDelete}
+                            onConfirm={confirmDelete}
+                        />
+                    )}
+                </div>
             </div>
         </div>
     );

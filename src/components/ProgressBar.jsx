@@ -10,27 +10,21 @@ import { useSelector } from 'react-redux';
   - The useEffect hook ensures that the progress is updated whenever the tasks in the Redux state change.
   - The progress is then used to set the width of the progress bar, creating a visual representation of task completion.
 */
-
 const ProgressBar = () => {
-    // Fetch tasks from the Redux state
     const tasks = useSelector((state) => state.tasks);
 
-    // State to store the calculated progress
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        // Calculate the percentage of completed tasks
         const completedTasks = tasks.filter(task => task.completed);
         const progressPercentage = (completedTasks.length / tasks.length) * 100;
 
-        // Update the progress state
         setProgress(progressPercentage);
     }, [tasks]);
 
-    // JSX Rendering
     return (
         <div className="progress-container">
-            <div className="progress-bar" style={{ width: `${progress}%` }}>
+            <div style={{ width: `${progress}%` }} className="progress-bar">
             </div>
         </div>
     );
