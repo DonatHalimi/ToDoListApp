@@ -1,3 +1,12 @@
+/*
+    ConfirmDelete Component
+    
+   - Provides a modal window for confirming whether to delete a task.
+   - Receives onCancel and onConfirm functions as props.
+   - When the user clicks outside the modal, the onCancel function is called.
+   - When the user clicks the "Cancel" button, the onCancel function is called.
+   - When the user clicks the "Delete" button, the onConfirm function is called.
+*/
 const ConfirmDelete = ({ onCancel, onConfirm }) => {
     const handleCancel = (e) => {
         e.stopPropagation();
