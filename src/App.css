@@ -8,13 +8,6 @@
   user-select: none;
 }
 
-input,
-button,
-textarea,
-select {
-  font-size: 16px;
-}
-
 ::selection {
   background-color: #664f9f;
   color: #fff;
