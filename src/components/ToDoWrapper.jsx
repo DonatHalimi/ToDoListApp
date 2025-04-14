@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
@@ -16,6 +17,7 @@ import ToDoForm from './ToDoForm';
    - Handles the addition, completion, deletion, and editing of tasks.
    - Updates progress based on task completion.
    - Uses local storage to persist tasks.
+   - Implements drag and drop reordering functionality with boundaries.
 */
 const ToDoWrapper = () => {
     const tasks = useSelector((state) => state.tasks);
@@ -63,16 +65,45 @@ const ToDoWrapper = () => {
         ));
     };
 
-    const editTask = (id) => {
+    const editTask = (task, id) => {
         dispatch(setTasks(
-            tasks.map(task => task.id === id ? { ...task, task, isEditing: !task.isEditing } : task)
+            tasks.map(t => t.id === id ? { ...t, task, isEditing: !t.isEditing } : t)
         ));
     };
 
     const updateProgress = (updatedTasks) => {
+        if (updatedTasks.length === 0) {
+            setProgress(0);
+            return;
+        }
         const completedTasks = updatedTasks.filter(task => task.completed);
         const progressPercentage = (completedTasks.length / updatedTasks.length) * 100;
-        setProgress(progressPercentage);
+        setProgress(isNaN(progressPercentage) ? 0 : progressPercentage);
+    };
+
+    const handleDragEnd = (result) => {
+        document.body.classList.remove('dragging');
+
+        if (!result.destination || result.destination.index === result.source.index) {
+            return;
+        }
+
+        if (result.destination.droppableId !== 'todo-list') {
+            toast.error('Tasks can only be moved within the task list');
+            return;
+        }
+
+        const reorderedTasks = Array.from(tasks);
+        const [removed] = reorderedTasks.splice(result.source.index, 1);
+        reorderedTasks.splice(result.destination.index, 0, removed);
+
+        dispatch(setTasks(reorderedTasks));
+
+        toast.success('Task order updated');
+    };
+
+    const handleDragStart = () => {
+        document.body.classList.add('dragging');
     };
 
     return (
@@ -80,19 +111,60 @@ const ToDoWrapper = () => {
             <h1>Get Things Done!</h1>
             <ToDoForm addTodo={addTodo} />
 
-            {tasks.map((task) =>
-                task.isEditing ? (
-                    <EditToDoForm key={task.id} editTodo={() => editTask(task.id)} task={task} />
-                ) : (
-                    <ToDo
-                        key={task.id}
-                        task={task}
-                        toggleComplete={() => toggleComplete(task.id)}
-                        deleteTodo={deleteTodo}
-                        editTodo={() => editTodo(task.id)}
-                    />
-                )
-            )};
+            <DragDropContext
+                onDragEnd={handleDragEnd}
+                onDragStart={handleDragStart}
+            >
+                <Droppable
+                    droppableId="todo-list"
+                    mode="standard"
+                    direction="vertical"
+                >
+                    {(provided, snapshot) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className={`todo-list-container ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
+                        >
+                            {tasks.map((task, index) => (
+                                <Draggable
+                                    key={task.id}
+                                    draggableId={task.id}
+                                    index={index}
+                                    isDragDisabled={task.isEditing}
+                                >
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            className={`task-item ${snapshot.isDragging ? 'dragging' : ''}`}
+                                        >
+                                            {task.isEditing ? (
+                                                <EditToDoForm
+                                                    key={task.id}
+                                                    editTodo={(value) => editTask(value, task.id)}
+                                                    task={task}
+                                                />
+                                            ) : (
+                                                <ToDo
+                                                    key={task.id}
+                                                    task={task}
+                                                    toggleComplete={() => toggleComplete(task.id)}
+                                                    deleteTodo={() => deleteTodo(task.id)}
+                                                    editTodo={() => editTodo(task.id)}
+                                                    dragHandleProps={provided.dragHandleProps}
+                                                    isDragging={snapshot.isDragging}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </div>
     );
 };

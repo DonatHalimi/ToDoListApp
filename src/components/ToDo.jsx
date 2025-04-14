@@ -1,12 +1,13 @@
-import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash, faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import ConfirmDelete from "./ConfirmDelete";
 
-const ToDo = ({ task, toggleComplete, editTodo, deleteTodo }) => {
+const ToDo = ({ task, toggleComplete, editTodo, deleteTodo, dragHandleProps, isDragging }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     const handleClick = () => toggleComplete(task.id);
+
     const handleEdit = (e) => {
         e.stopPropagation();
         editTodo(task.id);
@@ -25,8 +26,21 @@ const ToDo = ({ task, toggleComplete, editTodo, deleteTodo }) => {
     const cancelDelete = () => setShowPopup(false);
 
     return (
-        <div onClick={handleClick} className='Todo'>
-            <p className={`${task.completed ? "completed" : ""}`}>{task.task}</p>
+        <div
+            onClick={handleClick}
+            className={`Todo ${isDragging ? 'is-dragging' : ''}`}
+        >
+            <div className="todo-content">
+                <div {...dragHandleProps} className="drag-handle">
+                    <FontAwesomeIcon
+                        icon={faGripVertical}
+                        className='drag-icon'
+                    />
+                </div>
+                <p className={`${task.completed ? "completed" : "incompleted"}`}>
+                    {task.task}
+                </p>
+            </div>
             <div className="icons">
                 <FontAwesomeIcon
                     icon={faPenToSquare}
