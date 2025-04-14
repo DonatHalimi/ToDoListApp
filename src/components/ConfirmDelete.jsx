@@ -20,7 +20,7 @@ const ConfirmDelete = ({ onCancel, onConfirm }) => {
 
     return (
         <>
-            <div onClick={handleCancel} className="modal-overlay active"></div>
+            <div onClick={handleCancel} className="modal-overlay"></div>
             <div onClick={e => e.stopPropagation()} className="confirm-delete">
                 <div className="confirm-delete-text">Confirm delete</div>
                 <div className="confirm-delete-buttons">

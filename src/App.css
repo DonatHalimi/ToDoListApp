@@ -210,18 +210,19 @@ body.dragging .TodoWrapper {
 }
 
 .confirm-delete {
-  position: absolute;
-  right: -165px;
+  position: fixed;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  max-width: 400px;
   background: #202046;
   color: #fff;
-  padding: 0.75rem;
+  padding: 1rem;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  width: 145px;
-  font-size: 0.8rem;
+  z-index: 1050;
+  font-size: 1rem;
 }
 
 .confirm-delete-text {
@@ -264,41 +265,10 @@ body.dragging .TodoWrapper {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 1040;
-  display: none;
+  display: block;
 }
 
 @media (max-width: 768px) {
-  .modal-overlay.active {
-    display: block;
-  }
-
-  .confirm-delete {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(100% - 16rem);
-    max-width: 400px;
-    z-index: 1050;
-  }
-}
-
-@media (max-width: 768px) {
-  .modal-overlay.active {
-    display: block;
-  }
-
-  .confirm-delete {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 280px;
-    right: auto;
-    z-index: 1050;
-  }
-
   .confirm-delete-buttons {
     gap: 1rem;
   }
