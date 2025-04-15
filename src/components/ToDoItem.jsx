@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import ConfirmDelete from "./ConfirmDelete";
 
-const ToDo = ({ task, toggleComplete, editTodo, deleteTodo, dragHandleProps, isDragging }) => {
+const ToDoItem = ({ task, toggleComplete, editTodo, deleteTodo, dragHandleProps, isDragging }) => {
     const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
@@ -49,7 +49,7 @@ const ToDo = ({ task, toggleComplete, editTodo, deleteTodo, dragHandleProps, isD
                         className='drag-icon'
                     />
                 </div>
-                <p className={`${task.completed ? "completed" : "incompleted"}`}>
+                <p className={`task-text ${task.completed ? "completed" : "incompleted"}`}>
                     {task.task}
                 </p>
             </div>
@@ -71,4 +71,4 @@ const ToDo = ({ task, toggleComplete, editTodo, deleteTodo, dragHandleProps, isD
     );
 };
 
-export default ToDo;
+export default ToDoItem;

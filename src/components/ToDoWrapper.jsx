@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { addTask, setTasks } from '../redux/actions';
 import EditToDoForm from './EditToDoForm';
-import ToDo from './ToDo';
+import ToDoItem from './ToDoItem';
 import ToDoForm from './ToDoForm';
 
 /* 
@@ -146,7 +146,7 @@ const ToDoWrapper = () => {
                                                     task={task}
                                                 />
                                             ) : (
-                                                <ToDo
+                                                <ToDoItem
                                                     key={task.id}
                                                     task={task}
                                                     toggleComplete={() => toggleComplete(task.id)}
